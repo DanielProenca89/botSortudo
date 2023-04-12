@@ -14,7 +14,7 @@
     "sqlite3": "^5.0.6"
   },
   "scripts": {
-    "build": "npm install",
+    "build": "npm install && npm start",
     "start": "babel-node index.js",
     "restart": "pm2 restart all",
     "log": "pm2 logs",
