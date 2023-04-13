@@ -1,4 +1,9 @@
 {
+  "name": "botsortudo",
+  "version": "1.0.0",
+  "description": "Telegram bot|I.A|Blaze",
+  "main": "index.js",
+  "license": "MIT",
   "dependencies": {
     "@babel/core": "^7.21.4",
     "@babel/node": "^7.20.7",
