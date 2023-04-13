@@ -9,16 +9,13 @@
     "json-stringify": "^1.0.0",
     "lodash": "^4.17.21",
     "node-fetch": "^3.3.1",
-    "node-telegram-bot-api": "^0.57.0",
-    "pm2": "^5.2.0",
-    "sqlite3": "^5.0.6"
+    "node-telegram-bot-api": "^0.57.0"
   },
-  "scripts": {
-    "build": "npm install && npm start",
-    "start": "babel-node index.js",
-    "restart": "pm2 restart all",
-    "log": "pm2 logs",
-    "kill": "pm2 kill"
+"scripts": {
+    "start": "node index.js",
+    "build": "npm run eslint && npm run jest",
+    "eslint": "eslint .",
+    "jest": "jest"
   },
   "type": "module"
 }

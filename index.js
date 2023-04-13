@@ -1,15 +1,12 @@
 
 let now = new Date().toISOString().split('T')[0]
 
-import {bot} from './bot/bot.js'
-import { handleCreateInterval, handleClearInterval } from './bot/updateData.js';
-import {inlineKeyboard} from './bot/handle.js'
-//import  inputs from './collected/inputs.json' assert { type: "json" };
-import { TrainAndPredict, TrainAndPredict2 } from './bot/tensorFlow.js';
-import { getData } from './bot/getApiData.js';
-//const dba = require('./bot/db')
+import {bot} from './functions/bot.js'
+import { handleCreateInterval, handleClearInterval } from './functions/updateData.js';
+import {inlineKeyboard} from './functions/handle.js'
+import { TrainAndPredict, TrainAndPredict2 } from './functions/tensorFlow.js';
+import { getData } from './functions/getApiData.js';
 
-//dba.install()
 
 handleCreateInterval()
  let ep = 32
