@@ -1,22 +1,15 @@
 
-let now = new Date().toISOString().split('T')[0]
 
 import {bot} from './functions/bot.js'
-import { handleCreateInterval, handleClearInterval } from './functions/updateData.js';
+import { handleCreateInterval } from './functions/updateData.js';
 import {inlineKeyboard} from './functions/handle.js'
-import { TrainAndPredict, TrainAndPredict2 } from './functions/tensorFlow.js';
+import {  TrainAndPredict2 } from './functions/tensorFlow.js';
 import { getData } from './functions/getApiData.js';
 
 
 handleCreateInterval()
- let ep = 32
 
-bot.onText(/\/start/, function (msg, match)  {
-
-
-
-  const userName = msg.chat.username
-  const chatId = msg.chat.id
+bot.onText(/\/start/, function (msg)  {
 
   let options = inlineKeyboard(["Novo Sinal"],1)
   bot.sendMessage(msg.chat.id, "Para usar o Bot, você deve esperar um crash para gerar um Novo sinal.\n Caso o Bot de uma previsão abaixo de 2  não jogue!", options);
@@ -79,11 +72,5 @@ bot.on('callback_query', async function onCallbackQuery(callbackQuery) {
 });
 
 
-bot.on('message', function (msg) {
-
-
-
-
-});
 
 bot.on('polling_error', (err) => console.log(err));

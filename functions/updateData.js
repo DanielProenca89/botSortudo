@@ -1,5 +1,4 @@
-import  {TrainAndPredict}  from './tensorFlow.js';
-import { toJsonFile, getApiData, test, toCSV } from './getApiData.js';
+import { toJsonFile, getApiData } from './getApiData.js';
 
 
 let interval;
