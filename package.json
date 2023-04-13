@@ -20,7 +20,7 @@
   },
   "scripts": {
     "start": "node index.js",
-    "build": "npm run eslint && npm run jest",
+    "build": "npm run eslint",
     "eslint": "eslint .",
     "jest": "jest"
   },

@@ -1,6 +1,6 @@
 import fetch from "node-fetch"
 import fs from 'fs'
-import { dirname } from "path"
+
 
 export const getApiData= async (startDate, endDate, page=1)=>{
     try{

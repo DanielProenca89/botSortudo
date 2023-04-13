@@ -14,8 +14,8 @@ export const handleCreateInterval  = (time=30000)=>{
             
             let records = res.records
             let pages = parseFloat(res.total_pages)
-            console.log("resultados: "+records.length)
-            console.log("paginas: "+pages)
+           // console.log("resultados: "+records.length)
+           // console.log("paginas: "+pages)
         
             let i = 1
             while(pages > 0){

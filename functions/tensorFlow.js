@@ -1,14 +1,12 @@
 import * as tf from '@tensorflow/tfjs'
 //import  inputs from './test.json' assert { type: "json" };
-import { toJsonFile, chunkArray, getData } from './getApiData.js';
-
+import { toJsonFile, chunkArray} from './getApiData.js';
 import _ from 'lodash';
-import { parse } from 'dotenv';
+
 
 export async function getNextTIme(arr){
 
   let timestamps= arr.map(e=> new Date(e.created_at).getTime())
-  let lbl = arr.map(e=>e.created_at).sort((a,b)=>a-b)
   const min = _.min(timestamps);
   const max = _.max(timestamps);
   const timestampsNorm = timestamps.sort((a,b)=>a-b).map(t => (t - min) / (max - min));
@@ -123,7 +121,7 @@ export async function TrainAndPredict(arr, pred, ep=72){
 export async function TrainAndPredict2(arr){
   const media = _.mean(arr.map(e=>parseFloat(e.crash_point)));
   const lbl = []
-  const arrData = chunkArray(arr.sort((a,b)=>new Date(a.created_at).getTime() - new Date(a.created_at).getTime()).map(e=>parseFloat(e.crash_point)),6).map(e=>{
+  const arrData = chunkArray(arr.sort((a,b)=>new Date(a.created_at).getTime() - new Date(b.created_at).getTime()).map(e=>parseFloat(e.crash_point)),6).map(e=>{
     let result = e.pop()
     lbl.push(result)
     return e    
