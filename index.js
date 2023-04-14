@@ -3,7 +3,7 @@
 import {bot} from './functions/bot.js'
 import { handleCreateInterval } from './functions/updateData.js';
 import {inlineKeyboard} from './functions/handle.js'
-import {  TrainAndPredict2 } from './functions/tensorFlow.js';
+import {  TrainAndPredict } from './functions/tensorFlow.js';
 import { getData } from './functions/getApiData.js';
 
 
@@ -12,7 +12,25 @@ handleCreateInterval()
 bot.onText(/\/start/, function (msg)  {
 
   let options = inlineKeyboard(["Novo Sinal"],1)
-  bot.sendMessage(msg.chat.id, "Para usar o Bot, você deve esperar um crash para gerar um Novo sinal.\n Caso o Bot de uma previsão abaixo de 2  não jogue!", options);
+  bot.sendMessage(msg.chat.id, "Para usar o Bot, você deve esperar um crash para gerar um Novo sinal. Caso o bot dê uma previsão abaixo de 1 ou com rico alto, não jogue!", options);
+ /* const keyboard = {
+    inline_keyboard: [
+      [
+        {
+          "text": "Test web_app",
+          "web_app": {
+              "url": "https://revenkroz.github.io/telegram-web-app-bot-example/index.html"
+          }
+      }
+      ]
+    ]
+  };
+  
+  bot.sendMessage(msg.chat.id, 'Clique no botão abaixo para abrir o WebApp:', {
+    reply_markup: JSON.stringify(keyboard)
+  });*/
+
+  
 
 });
 
@@ -37,7 +55,7 @@ bot.on('callback_query', async function onCallbackQuery(callbackQuery) {
 
     //const test = await TrainAndPredict(inputs,[[new Date(inputs[0].created_at).getSeconds(), parseFloat(inputs[1].crash_point)]])
     //const res = await TrainAndPredict(inputs,[[new Date(inputs[0].created_at).getTime(), parseFloat(inputs[0].crash_point)]],ep)
-    const res = await TrainAndPredict2(inputs)
+    const res = await TrainAndPredict(inputs,[[new Date(inputs[0].created_at).getTime(), parseFloat(inputs[0].crash_point)]],72)
 
     
 
@@ -46,7 +64,7 @@ bot.on('callback_query', async function onCallbackQuery(callbackQuery) {
 
  
     const risco =  ((razao/res.media)*100).toFixed(2)
-    if(razao >= 1 && risco < 100 && risco >= 0 ){
+    if(razao >= 1  ){
     
      // >= 4 ? (razao / Math.sqrt(razao)).toFixed(2):razao
     text = `

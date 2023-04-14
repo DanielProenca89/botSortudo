@@ -18,24 +18,28 @@ export const handleCreateInterval  = (time=30000)=>{
            // console.log("paginas: "+pages)
         
             let i = 1
+            try{
             while(pages > 0){
         
                 i = i + 1
                 console.log("Pagina: "+i)
-                const newRes = await getApiData(inicio,fim, i)
+                const newRes = await getApiData(fim,fim, i)
                 
                 records = [...records, ...newRes.records]
         
                 pages = pages - 1
             }
             return records
-        
+            }catch{
+                return []
+            }
             
          }
 
     const res = await test(after,now)
+    if(res[0]){
     toJsonFile(res, "inputs")
-
+    }
     }, time)
 }
 

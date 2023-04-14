@@ -63,7 +63,7 @@ export async function TrainAndPredict(arr, pred, ep=72){
   const media = _.mean(arr.map(e=>parseFloat(e.crash_point)));
   console.log(minV)
   console.log(maxV)
-  const training = arr.slice(1)
+  const training = arr.sort((a,b)=>new Date(a.created_at).getTime() - new Date(b.created_at).getTime()).slice(0, arr.length - 2)
   let x= training.map(e=> [ (new Date(e.created_at).getTime() - minT)/(maxT - minT),(parseFloat(e.crash_point)-minV)/(maxV-minV)])
 
 
@@ -146,7 +146,7 @@ export async function TrainAndPredict2(arr){
   model.compile({loss: 'meanSquaredError', optimizer: tf.train.adam(0.0031441251)});
   
   // Treine o modelo com cada lote.
-  await model.fit(data, labels, {epochs: 100});
+  await model.fit(data, labels, {epochs: 72});
  
   // Use o modelo para fazer previsões.
   const testData = tf.tensor2d([arr.slice(0,5).map(e => parseFloat(e.crash_point))]);
