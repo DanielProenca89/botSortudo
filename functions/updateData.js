@@ -37,7 +37,7 @@ export const handleCreateInterval  = (time=30000)=>{
          }
 
     const res = await test(after,now)
-    if(res[0]){
+    if(res){
     toJsonFile(res, "inputs")
     }
     }, time)

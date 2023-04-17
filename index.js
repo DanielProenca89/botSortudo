@@ -3,7 +3,7 @@
 import {bot} from './functions/bot.js'
 import { handleCreateInterval } from './functions/updateData.js';
 import {inlineKeyboard} from './functions/handle.js'
-import {  TrainAndPredict } from './functions/tensorFlow.js';
+import {  TrainAndPredict, TrainAndPredict2 } from './functions/tensorFlow.js';
 import { getData } from './functions/getApiData.js';
 
 
@@ -55,7 +55,7 @@ bot.on('callback_query', async function onCallbackQuery(callbackQuery) {
 
     //const test = await TrainAndPredict(inputs,[[new Date(inputs[0].created_at).getSeconds(), parseFloat(inputs[1].crash_point)]])
     //const res = await TrainAndPredict(inputs,[[new Date(inputs[0].created_at).getTime(), parseFloat(inputs[0].crash_point)]],ep)
-    const res = await TrainAndPredict(inputs,[[new Date(inputs[0].created_at).getTime(), parseFloat(inputs[0].crash_point)]],72)
+    const res = await TrainAndPredict2(inputs)
 
     
 
