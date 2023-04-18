@@ -3,8 +3,8 @@
 import {bot} from './functions/bot.js'
 import { handleCreateInterval } from './functions/updateData.js';
 import {inlineKeyboard} from './functions/handle.js'
-import {  TrainAndPredict, TrainAndPredict2 } from './functions/tensorFlow.js';
-import { getData } from './functions/getApiData.js';
+import {  TrainAndPredict, TrainAndPredict2, TrainAndPredict3 } from './functions/tensorFlow.js';
+import { getData, getApiData } from './functions/getApiData.js';
 
 
 handleCreateInterval()
@@ -52,10 +52,11 @@ bot.on('callback_query', async function onCallbackQuery(callbackQuery) {
     sec.setSeconds(new Date().getSeconds()+8)
 
     const inputs = await getData()
+    const lastResults = await getApiData(new Date().toISOString().split('T')[0], new Date().toISOString().split('T')[0])
 
-    //const test = await TrainAndPredict(inputs,[[new Date(inputs[0].created_at).getSeconds(), parseFloat(inputs[1].crash_point)]])
-    //const res = await TrainAndPredict(inputs,[[new Date(inputs[0].created_at).getTime(), parseFloat(inputs[0].crash_point)]],ep)
-    const res = await TrainAndPredict2(inputs)
+    //const res = await TrainAndPredict(inputs,[[new Date(inputs[0].created_at).getSeconds(), parseFloat(inputs[1].crash_point)]])
+    const res = await TrainAndPredict(inputs,[[new Date(lastResults.records[0].created_at).getTime(), parseFloat(lastResults.records[0].crash_point)]],10)
+    //const res = await TrainAndPredict3(inputs)
 
     
 

@@ -138,7 +138,7 @@ export async function TrainAndPredict(arr, pred, ep=72){
 
   const lossCallback = (epoch, logs)=>{
     loss = logs.loss
-    console.log(`Epoch ${epoch}: loss = ${logs.loss} acc=${JSON.stringify(logs)}`)
+
   }
 
 
@@ -169,7 +169,9 @@ export async function TrainAndPredict(arr, pred, ep=72){
     // fazer uma previsão com o modelo
     console.log(pred.map(e=> [ (new Date(e[0]).getTime()-minT)/(maxT - minT),(parseFloat(e[1])-minV)/(maxV-minV)]))
 
-    const yPredict = model.predict(tf.tensor(pred.map(e=> [ (new Date(e[0]).getTime()-minT)/(maxT - minT),(parseFloat(e[1])-minV)/(maxV - minV)])));
+    let yPredict = model.predict(tf.tensor(pred.map(e=> [ (new Date(e[0]).getTime()-minT)/(maxT - minT),(parseFloat(e[1])-minV)/(maxV - minV)])));
+    let prev = await yPredict.dataSync()[0]
+    yPredict = model.predict(tf.tensor(pred.map(e=> [ (new Date().getTime()-minT)/(maxT - minT),(prev-minV)/(maxV - minV)])));
     //const score = model.evaluate(xPredict, yPredict)
    
     const res =  await yPredict.mul(maxV - minV).add(minV).dataSync()[0];
