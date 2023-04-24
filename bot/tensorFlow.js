@@ -145,7 +145,7 @@ export async function TrainAndPredict2(arr){
       tf.layers.dense({ units: 1}),
     ]
   });
-  model.compile({loss: 'meanSquaredError', optimizer: tf.train.adam(0.0031441251)});
+  model.compile({loss: 'meanSquaredError', optimizer: "Adamax"});
   
   // Treine o modelo com cada lote.
   await model.fit(data, labels, {epochs: 100});

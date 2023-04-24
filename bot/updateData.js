@@ -24,9 +24,9 @@ export const handleCreateInterval  = (time=30000)=>{
                 i = i + 1
                 console.log("Pagina: "+i)
                 const newRes = await getApiData(inicio,fim, i)
-                
+                if (newRes[0]){
                 records = [...records, ...newRes.records]
-        
+                }
                 pages = pages - 1
             }
             return records
