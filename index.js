@@ -45,7 +45,7 @@ bot.on('callback_query', async function onCallbackQuery(callbackQuery) {
 
     const inputs = await getData()
 
-    //const test = await TrainAndPredict(inputs,[[new Date(inputs[0].created_at).getSeconds(), parseFloat(inputs[1].crash_point)]])
+    //const res = await TrainAndPredict(inputs,[[new Date(inputs[0].created_at).getSeconds(), parseInt(inputs[0].crash_point)]])
     //const res = await TrainAndPredict(inputs,[[new Date(inputs[0].created_at).getTime(), parseFloat(inputs[0].crash_point)]],ep)
     const res = await TrainAndPredict2(inputs)
 
@@ -56,7 +56,7 @@ bot.on('callback_query', async function onCallbackQuery(callbackQuery) {
 
  
     const risco =  ((razao/res.media)*100).toFixed(2)
-    if(razao >= 1 && risco < 100 && risco >= 0 ){
+    if(razao >= 1){
     
      // >= 4 ? (razao / Math.sqrt(razao)).toFixed(2):razao
     text = `

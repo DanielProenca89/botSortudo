@@ -57,19 +57,21 @@ export async function getNextTIme(arr){
 
 
 
-export async function TrainAndPredict(arr, pred, ep=72){
-  const minT = _.min(arr.map(e=>new Date(e.created_at)));
-  const maxT = _.max(arr.map(e=>new Date(e.created_at)));
+export async function TrainAndPredict(example, pred, ep=72){
+  let arr = example.map(e=>{return {created_at:e.created_at, crash_point:parseFloat(e.crash_point)<2?1:parseFloat(e.crash_point)<3?2:0}})
+  console.log(arr)
+  const minT = _.min(arr.map(e=>new Date(e.created_at).getSeconds()));
+  const maxT = _.max(arr.map(e=>new Date(e.created_at).getSeconds()));
   const minV = _.min(arr.map(e=>parseFloat(e.crash_point)));
   const maxV = _.max(arr.map(e=>parseFloat(e.crash_point)));
   const media = _.mean(arr.map(e=>parseFloat(e.crash_point)));
   console.log(minV)
   console.log(maxV)
   const training = arr.slice(1)
-  let x= training.map(e=> [ (new Date(e.created_at).getTime() - minT)/(maxT - minT),(parseFloat(e.crash_point)-minV)/(maxV-minV)])
+  let x= training.map(e=> [ (new Date(e.created_at).getSeconds() - minT)/(maxT - minT),(parseFloat(e.crash_point)-minV)/(maxV-minV)])
 
 
-  let y = training.map(e=>[(parseFloat(e.crash_point)-minV)/(maxV - minV)])
+  let y = example.slice(1).map(e=>[parseFloat(e.crash_point)])
 
   const xTrain = tf.tensor(x);
 
@@ -108,30 +110,30 @@ export async function TrainAndPredict(arr, pred, ep=72){
   
 
     // fazer uma previsão com o modelo
-    console.log(pred.map(e=> [ (new Date(e[0]).getTime()-minT)/(maxT - minT),(parseFloat(e[1])-minV)/(maxV-minV)]))
+   // console.log(pred.map(e=> [ (new Date(e[0]).getTime()-minT)/(maxT - minT),(parseFloat(e[1])-minV)/(maxV-minV)]))
 
-    const yPredict = model.predict(tf.tensor(pred.map(e=> [ (new Date(e[0]).getTime()-minT)/(maxT - minT),(parseFloat(e[1])-minV)/(maxV - minV)])));
+    const yPredict = model.predict(tf.tensor(pred.map(e=> [ (new Date(e[0]).getSeconds()-minT)/(maxT - minT),(parseFloat(e[1])<2?1:parseFloat(e[1])<3?2:0)/(maxV - minV)])));
     //const score = model.evaluate(xPredict, yPredict)
    
     const res =  await yPredict.mul(maxV - minV).add(minV).dataSync()[0];
-
+    console.log(res)
     return {response:res, loss:loss, media:media}
+    
 
 }
 
 
 export async function TrainAndPredict2(arr){
-  const media = _.mean(arr.map(e=>parseFloat(e.crash_point)));
+  const media = _.mean(arr.map(e=>parseFloat(e[1])<2?1:parseFloat(e[1])<3?2:0));
   const lbl = []
   const arrData = chunkArray(arr.sort((a,b)=>new Date(a.created_at).getTime() - new Date(a.created_at).getTime()).map(e=>parseFloat(e.crash_point)),6).map(e=>{
     let result = e.pop()
     lbl.push(result)
     return e    
   })
-  console.log(lbl.length)
-  console.log(arrData.length)
 
-  const data = tf.tensor2d(arrData.slice(0, -1))
+
+  const data = tf.tensor2d(arrData.slice(0, -1).map(e=>e.map(e=>parseFloat(e)<2?0:parseFloat(e)>=2?1:1)))
   const labels = tf.tensor1d(lbl.slice(0, -1));
   
   // Agrupe os dados e rótulos em lotes de tamanho 6.
@@ -141,17 +143,18 @@ export async function TrainAndPredict2(arr){
   //model.add(tf.layers.dense({units: 1, inputShape: [5]}));
   const model = tf.sequential({
     layers: [
-      tf.layers.dense({ inputShape: [5], units: 32, activation: 'relu' }),
+      tf.layers.dense({ inputShape: [5], units: 2, activation: 'relu' }),
       tf.layers.dense({ units: 1}),
     ]
   });
-  model.compile({loss: 'meanSquaredError', optimizer: "Adamax"});
-  
+  //model.compile({loss: 'meanSquaredError', optimizer: "Adamax"});
+  model.compile({ optimizer: tf.train.adam(0.0031441251), loss: 'meanSquaredError' });
+
   // Treine o modelo com cada lote.
-  await model.fit(data, labels, {epochs: 100});
+  await model.fit(data, labels, {epochs: 72});
  
   // Use o modelo para fazer previsões.
-  const testData = tf.tensor2d([arr.slice(0,5).map(e => parseFloat(e.crash_point))]);
+  const testData = tf.tensor2d([arr.slice(0,5).map(e =>parseFloat(e[1])<2?0:parseFloat(e[1])>=2?1:1)]);
   const predictions = model.predict(testData);
   return {response:predictions.dataSync()[0], media:media}
 }
